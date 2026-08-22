@@ -5,14 +5,11 @@ import com.picpaysimples.domain.user.User;
 import com.picpaysimples.dtos.TransactionDTO;
 import com.picpaysimples.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
-import java.util.Map;
+
 
 @Service
 public class TransactionService {
@@ -23,7 +20,7 @@ public class TransactionService {
     private TransactionRepository repository;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private AuthorizationService authorizationService;
 
     @Autowired
     private NotificationService notificationService;
@@ -33,7 +30,7 @@ public class TransactionService {
         User receiver = this.userService.findUserById(transaction.receiverId());
 
         userService.validateTransaction(sender, transaction.value());
-        boolean isAuthorized = this.authorizeTransaction(sender, transaction.value());
+        boolean isAuthorized = this.authorizationService.authorizeTransaction(sender, transaction.value());
         if(!isAuthorized){
             throw new Exception("Transação não autorizada");
         }
@@ -59,18 +56,6 @@ public class TransactionService {
     }
 
 
-    public boolean authorizeTransaction(User sender, BigDecimal value) {
-        // Mock temporário enquanto o serviço externo está indisponível.
-        return true;
-        /*
-        ResponseEntity<Map> authorizationResponse = restTemplate.getForEntity("https://util.devi.tools/api/v2/authorize", Map.class);
 
-        if (authorizationResponse.getStatusCode() == HttpStatus.OK) {
-            String message = (String) authorizationResponse.getBody().get("message");
-            return "Autorizado".equalsIgnoreCase(message);
-        } else return false;
-
-         */
-    }
 
 }
