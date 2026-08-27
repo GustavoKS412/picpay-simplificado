@@ -1,4 +1,4 @@
-# PicPay Simples
+# PicPay Simplificado
 [![English](https://img.shields.io/badge/lang-English-blue)](README.md)
 [![Português](https://img.shields.io/badge/lang-Portugu%C3%AAs-green)](README.pt-BR.md)
 
